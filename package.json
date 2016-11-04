@@ -1,0 +1,16 @@
+{
+  "name": "yk100mparse",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "phelm <npm@phelm.co.uk>",
+  "license": "ISC",
+  "dependencies": {
+    "csv": "^1.1.0",
+    "mongodb": "^2.2.11",
+    "mongoose": "^4.6.5"
+  }
+}
