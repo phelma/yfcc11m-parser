@@ -9,8 +9,20 @@
   "author": "phelm <npm@phelm.co.uk>",
   "license": "ISC",
   "dependencies": {
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-latest": "^6.16.0",
     "csv": "^1.1.0",
+    "csv-parse": "https://github.com/phelma/node-csv-parse.git",
     "mongodb": "^2.2.11",
-    "mongoose": "^4.6.5"
+    "mongoose": "^4.6.5",
+    "pg": "^6.1.0",
+    "redis": "^2.6.3",
+    "shortid": "^2.2.6",
+    "unbzip2-stream": "^1.0.10"
+  },
+  "babel": {
+    "presets": [
+      "latest"
+    ]
   }
 }

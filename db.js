@@ -46,6 +46,10 @@ module.exports = {
       }
     });
 
+    // Tag.update({name: tagString}, {$inc: {count: 1}}, {upsert: true}, function(err, res) {
+    //   done && done(err);
+    // });
+
     // collection.insertOne({
     //   tag: tag,
     //   count: 1
