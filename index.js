@@ -4,6 +4,7 @@ let fs = require('fs');
 let parse = require('./node-csv-parse');
 let id = require('shortid').generate();
 let bz2 = require('unbzip2-stream');
+let async = require('async');
 console.log('id', id);
 
 let db = require('./redis');
@@ -15,7 +16,7 @@ String.prototype.replaceAll = function(search, replacement) {
 
 let maxQueries = 10000;
 
-db.init(id, () => {
+function set(n, callback) {
   let count = 0;
   let opts = {
     delimiter: '\t',
@@ -24,7 +25,8 @@ db.init(id, () => {
   let paused = false;
   let dbQueries = 0;
   let parser = parse(opts);
-  let input = fs.createReadStream(__dirname + '/yfcc100m_dataset-0')
+  let index = n || 0;
+  let input = fs.createReadStream(__dirname + '/YFCC100M/yfcc100m_dataset-' + index)
     // .pipe(bz2())
     .pipe(parser);
 
@@ -32,7 +34,7 @@ db.init(id, () => {
   input.on('end', () => {
     console.timeEnd('TIME');
     console.log('ID ' + id);
-    db.done();
+    callback();
   });
 
   parser.on('data', (data) => {
@@ -79,6 +81,19 @@ db.init(id, () => {
 
   parser.on('error', (err) => {
     console.error('ERROR', err);
+  })
+}
+
+db.init(id, () => {
+  let indexes = [0,1,2,3,4,5,6,7,8,9];
+  async.eachSeries(indexes, function(el, done) {
+    console.log('NEXT SET ' + el);
+    set(el, function() {
+      console.log('SET DONE ' + el);
+      done();
+    });
+  }, function(err) {
+    console.log('ALL DONE YEAH MATE')
   })
 })
 

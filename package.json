@@ -9,6 +9,7 @@
   "author": "phelm <npm@phelm.co.uk>",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.1.2",
     "babel-polyfill": "^6.16.0",
     "babel-preset-latest": "^6.16.0",
     "csv": "^1.1.0",
