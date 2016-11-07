@@ -5,6 +5,7 @@ let config = {
 };
 
 let mongoose = require('mongoose');
+let mongodb = require('mongodb');
 
 
 let tagSchema = mongoose.Schema({
@@ -17,12 +18,15 @@ let Tag = mongoose.model('Tag', tagSchema);
 let assert = require('assert');
 
 let db;
-let collection;
+
+let quickClient;
+let quickDb;
+let quickCollection;
 
 module.exports = {
   init(done){
     mongoose.connect(config.url);
-    let db = mongoose.connection;
+    db = mongoose.connection;
     db.once('open', function() {
       done();
     })
@@ -44,7 +48,53 @@ module.exports = {
           done && done(err);
         })
       }
-    });
+    })
+  },
+
+  addBoth(tagString, count, done){
+    let tag = new Tag({name: tagString, count: count})
+    tag.save(function(err) {
+      done && done(err);
+    })
+  },
+
+  quit(){
+    db.close();
+  },
+
+  initQuick(done){
+    var quickClient = mongodb.MongoClient;
+    quickClient.connect(config.url, function(err, db) {
+      quickDb = db;
+      quickCollection = db.collection('tags');
+      done && done(err);
+    })
+  },
+
+  addBothQuick(tagString, count, done){
+    quickCollection.insert({
+      name: tagString,
+      count: Number(count)
+    }, function(err, res) {
+      done && done(err);
+    })
+  },
+
+  getQuick(count, offset, done){
+    console.log('getting')
+    quickCollection
+      .find({})
+      .sort({count: -1})
+      .limit(count || 10)
+      .skip(offset || 0)
+      .toArray(function (err, docs) {
+        done && done(err, docs);
+      })
+  },
+
+  quitQuick(){
+    quickDb.close();
+  }
 
     // Tag.update({name: tagString}, {$inc: {count: 1}}, {upsert: true}, function(err, res) {
     //   done && done(err);
@@ -58,5 +108,4 @@ module.exports = {
     //   console.log('inserted', tag);
     //   done && done(err, r);
     // });
-  }
 }
