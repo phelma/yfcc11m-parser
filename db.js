@@ -65,7 +65,11 @@ module.exports = {
   initQuick(done){
     var quickClient = mongodb.MongoClient;
     quickClient.connect(config.url, function(err, db) {
-      quickDb = db;
+      if(err){
+        console.log('error')
+        console.error(err);
+        console.trace();
+      }
       quickCollection = db.collection('tags');
       done && done(err);
     })

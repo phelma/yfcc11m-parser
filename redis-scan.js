@@ -12,7 +12,11 @@ let id = '';
 
 let match = 'tag:B1Q-ik0eg:';
 
-mongo.initQuick(function() {
+mongo.initQuick(function(err) {
+  if (err){
+    console.log(err);
+    return;
+  }
   redisClient = redis.createClient();
   redisClient.on('connect', () => {
     console.log('redis connected');
