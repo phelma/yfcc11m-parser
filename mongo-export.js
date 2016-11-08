@@ -1,7 +1,7 @@
 'use strict';
 
 let count = 100000;
-let tag = 'tag:B1Q-ik0eg:';
+let tag = 'tag:HkN85WAxl:'
 let db = require('./db');
 
 let id = require('shortid').generate();
