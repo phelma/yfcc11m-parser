@@ -15,6 +15,7 @@
     "csv": "^1.1.0",
     "csv-parse": "https://github.com/phelma/node-csv-parse.git",
     "csv-write-stream": "^2.0.0",
+    "jsonfile": "^2.4.0",
     "mongodb": "^2.2.11",
     "mongoose": "^4.6.5",
     "pg": "^6.1.0",

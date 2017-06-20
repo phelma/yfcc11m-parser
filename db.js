@@ -97,7 +97,7 @@ module.exports = {
   },
 
   quitQuick(){
-    quickDb.close();
+    //quickDb.close();
   }
 
     // Tag.update({name: tagString}, {$inc: {count: 1}}, {upsert: true}, function(err, res) {
