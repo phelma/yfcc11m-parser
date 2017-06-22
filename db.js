@@ -29,7 +29,7 @@ module.exports = {
     db = mongoose.connection;
     db.once('open', function() {
       done();
-    })
+    });
   },
 
   addTag(tagString, done){
@@ -41,12 +41,12 @@ module.exports = {
       if (res) {
         res.update({ $inc: {count: 1}}, function(err) {
           done && done(err);
-        })
+        });
       } else {
         let tag = new Tag({name: tagString, count: 1});
         tag.save(function (err) {
           done && done(err);
-        })
+        });
       }
     })
   },
@@ -55,7 +55,7 @@ module.exports = {
     let tag = new Tag({name: tagString, count: count})
     tag.save(function(err) {
       done && done(err);
-    })
+    });
   },
 
   quit(){
@@ -72,7 +72,7 @@ module.exports = {
       }
       quickCollection = db.collection('tags');
       done && done(err);
-    })
+    });
   },
 
   addBothQuick(tagString, count, done){
@@ -81,7 +81,7 @@ module.exports = {
       count: Number(count)
     }, function(err, res) {
       done && done(err);
-    })
+    });
   },
 
   getQuick(count, offset, done){
@@ -93,7 +93,7 @@ module.exports = {
       .skip(offset || 0)
       .toArray(function (err, docs) {
         done && done(err, docs);
-      })
+      });
   },
 
   quitQuick(){

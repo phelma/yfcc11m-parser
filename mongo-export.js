@@ -1,7 +1,7 @@
 'use strict';
 
 let count = 100000;
-let tag = 'tag:HkN85WAxl:'
+let tag = 'tag:HkN85WAxl:';
 let db = require('./db');
 
 let id = require('shortid').generate();
@@ -44,4 +44,4 @@ db.initQuick(function (err) {
     // console.log(out);
     console.log("DONE");
   });
-})
+});
