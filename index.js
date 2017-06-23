@@ -8,6 +8,7 @@ let async = require('async');
 console.log('id', id);
 
 let db = require('./redis');
+let keywordDumper = require('./keyword-exporter');
 
 String.prototype.replaceAll = function(search, replacement) {
   var target = this;
@@ -114,11 +115,14 @@ function set(n, callback) {
 }
 
 db.init(id, () => {
-  let dump = false;
+  let dump = true;
   if(dump) {
-    db.dumpWhiteListUrlsToCsv(function() {
-      console.log('CSV file written');
+    keywordDumper.exportUrls(function() {
+      console.log('CSV File written');
     });
+//    db.dumpWhiteListUrlsToCsv(function() {
+//      console.log('CSV file written');
+//    });
   }
   else {
     let indexes = [0,1,2,3,4,5,6,7,8,9];

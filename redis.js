@@ -19,13 +19,15 @@ let csvWriter = require('csv-write-stream');
 let client;
 let id = '';
 
+var clearDb = false;
+var host = '192.168.1.6';
 let whiteList = new Set();
 let whiteListArr = new Array();
 
 module.exports = {
   init(idIn, done) {
     id = idIn;
-    client = redis.createClient();
+    client = redis.createClient({host:host});
 
     async.series([
       function(next) {
@@ -34,10 +36,14 @@ module.exports = {
         });
       },
       function(next) {
-        client.flushdb( function(err, success) {
-          console.log('Database cleared ' + success);
+        if(clearDb) {
+          client.flushdb( function(err, success) {
+            console.log('Database cleared ' + success);
+            next();
+          });
+        } else {
           next();
-        });
+        }
       },
       function(next) {
         // read the white list tags
@@ -55,6 +61,32 @@ module.exports = {
       function(next) {
         done();
       }]);
+  },
+
+  scan(pattern, cursor, callback) {
+    client.scan(cursor, 'MATCH', pattern, 'COUNT', 100, function(err, reply) {
+      if(err) {
+        console.log(err);
+        throw err;
+      }
+      cursor = reply[0];
+      if(cursor === '0') {
+        callback(null);
+      }
+      else {
+        callback(reply[1], function() {
+          setImmediate(function() {
+            module.exports.scan(pattern, cursor, callback);
+          });
+        });
+      }
+    });
+  },
+
+  getArray(key, callback) {
+    client.lrange(key, 0, -1, function(err, val) {
+      callback(err, val);
+    });
   },
 
   tokenise(strIn) {
