@@ -91,6 +91,7 @@ module.exports = {
               });
             },
             function() {
+              console.timeEnd(word);
               nextword();
             });
         },
