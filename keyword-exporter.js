@@ -13,15 +13,11 @@ var writeCsv = function(name, imgs, done) {
   let writer = csvWriter();
   writer.pipe(fs.createWriteStream(outputFolder + name + '_urls.csv'));
 
-  async.eachSeries(imgs.values(),
-    function(img, nexturl) {
-      writer.write({tag:img.tag, url:img.url, source:'flick100m'});
-      nexturl();
-    },
-    function() {
-      writer.end();
-      done();
-    });
+  imgs.forEach(function(img, score) {
+    writer.write({tag:img.tag, url:img.url, source:'flick100m'});
+  });
+
+  writer.end();
 };
 
 module.exports = {
@@ -51,7 +47,7 @@ module.exports = {
       function(keywords, next) {
         let totalWords = 0;
 
-        async.eachLimit(keywords, 5, function(word, nextword) {
+        async.eachLimit(keywords, 1, function(word, nextword) {
           totalWords += 1;
           console.log('Exporting word ' + word + ' total so far ' + totalWords.toString());
           let topimgs = new multimap();
