@@ -20,7 +20,7 @@ let client;
 let id = '';
 
 var clearDb = false;
-var host = '192.168.1.6';
+var host = '127.0.0.1'; //'192.168.1.6';
 let whiteList = new Set();
 let whiteListArr = new Array();
 
@@ -64,7 +64,7 @@ module.exports = {
   },
 
   scan(pattern, cursor, callback) {
-    client.scan(cursor, 'MATCH', pattern, 'COUNT', 10000, function(err, reply) {
+    client.scan(cursor, 'MATCH', pattern, 'COUNT', 10000000, function(err, reply) {
       if(err) {
         console.log(err);
         throw err;

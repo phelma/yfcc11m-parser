@@ -13,10 +13,10 @@ var writeCsv = function(name, imgs, done) {
   let writer = csvWriter();
   writer.pipe(fs.createWriteStream(outputFolder + name + '_urls.csv'));
 
-  async.eachSeries(imgs,
-    function(img, nextWord) {
+  async.eachSeries(imgs.values(),
+    function(img, nexturl) {
       writer.write({tag:img.tag, url:img.url, source:'flick100m'});
-      nextWord();
+      nexturl();
     },
     function() {
       writer.end();
@@ -28,7 +28,10 @@ module.exports = {
 
   exportUrls(done) {
 
-    fs.mkdirSync(outputFolder);
+    try {
+      fs.mkdirSync(outputFolder);
+    } catch(e) {
+    }
 
     async.waterfall([
       function(next) {
