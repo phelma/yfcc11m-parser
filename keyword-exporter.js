@@ -42,8 +42,11 @@ module.exports = {
         }); 
       },
       function(keywords, next) {
+        let totalWords = 0;
 
         async.eachLimit(keywords, 5, function(word, nextword) {
+          totalWords += 1;
+          console.log('Exporting word ' + word + ' total so far ' + totalWords.toString());
           let topimgs = new multimap();
 
           db.scan(word + '*', '0', function(keys, handled) {
