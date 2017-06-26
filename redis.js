@@ -64,7 +64,7 @@ module.exports = {
   },
 
   scan(pattern, cursor, callback) {
-    client.scan(cursor, 'MATCH', pattern, 'COUNT', 100, function(err, reply) {
+    client.scan(cursor, 'MATCH', pattern, 'COUNT', 10000, function(err, reply) {
       if(err) {
         console.log(err);
         throw err;

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 let readline = require('readline');
 let fs = require('fs');
@@ -7,9 +7,11 @@ let csvWriter = require('csv-write-stream');
 let db = require('./redis');
 let multimap = require('multimap');
 
-var writeCsv = function(imgs, done) {               
+let outputFolder = './urls/';
+
+var writeCsv = function(name, imgs, done) {               
   let writer = csvWriter();
-  writer.pipe(fs.createWriteStream('./urls.csv'));
+  writer.pipe(fs.createWriteStream(outputFolder + name + '_urls.csv'));
 
   async.eachSeries(imgs,
     function(img, nextWord) {
@@ -25,6 +27,8 @@ var writeCsv = function(imgs, done) {
 module.exports = {
 
   exportUrls(done) {
+
+    fs.mkdirSync(outputFolder);
 
     async.waterfall([
       function(next) {
@@ -48,11 +52,13 @@ module.exports = {
           totalWords += 1;
           console.log('Exporting word ' + word + ' total so far ' + totalWords.toString());
           let topimgs = new multimap();
+          console.time(word);
 
           db.scan(word + '*', '0', function(keys, handled) {
             if(keys == null) {
               // write list out to csv
-              writeCsv(topimgs, nextword);
+              console.timeEnd(word);
+              writeCsv(word, topimgs, nextword);
             } else {
 
               // get the key
@@ -66,7 +72,7 @@ module.exports = {
                     let score = (15 - tagOrder) + titleCnt + descrpCnt;
                     topimgs.set(score, {tag:word, url:url});
 
-                    if(topimgs.size > 6000) {
+                    if(topimgs.size > 4500) {
                       // remove an image with the smallest score
                       let key = topimgs.keys().next().value;
                       let valueToDelete = topimgs.get(key)[0];
