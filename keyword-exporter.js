@@ -85,7 +85,7 @@ module.exports = {
                       }
                     }
                   }
-                  cnt += 1
+                  cnt += 1;
                   nextIter();
                 }
               });

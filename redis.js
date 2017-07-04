@@ -149,6 +149,9 @@ module.exports = {
             tagOrder], next);
         }],
       function(err) {
+        if(err) {
+          console.log('Error inserting into database ' + err);
+        }
         done();
       });
     } else {

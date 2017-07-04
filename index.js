@@ -83,7 +83,6 @@ function set(n, callback) {
         async.eachOf(tags, (item, index, cb) => {
 
           if(index < 15) {
-            item = item.replaceAll('+', ' ');
             db.addTag(item, url, title, description, index, function(err) {
               cb(err);
             });
@@ -115,7 +114,7 @@ function set(n, callback) {
 }
 
 db.init(id, () => {
-  let dump = true;
+  let dump = false;
   if(dump) {
     keywordDumper.exportUrls(function() {
       console.log('CSV File written');
